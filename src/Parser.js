@@ -1,6 +1,5 @@
 const { constants } = require("./constants");
 const { Tokenizer } = require("./Tokenizer");
-// import { Tokenizer } from "./Tokenizer";
 
 // Recursive descent parser
 class Parser {
@@ -14,7 +13,6 @@ class Parser {
     // this._string = string;
     this._tokenizer.init(string);
     this._lookahead = this._tokenizer.getNextToken();
-    // console.log(this._tokenizer.getNextToken());
     return this.Program();
   }
 
@@ -22,8 +20,34 @@ class Parser {
   Program() {
     return {
       type: constants.Program,
-      body: this.Literal(),
+      body: this.StatementList(),
     };
+  }
+
+  StatementList() {
+    const list = [this.Statement()];
+    while (this._lookahead != null) {
+      list.push(this.Statement());
+    }
+    return list;
+  }
+
+  // Expression Statement
+  Statement() {
+    return this.ExpressionStatement();
+  }
+
+  ExpressionStatement() {
+    const expression = this.Expression();
+    this._eat(constants.SEMICOLON);
+    return {
+      type: constants.ExpressionStatement,
+      expression,
+    };
+  }
+
+  Expression() {
+    return this.Literal();
   }
 
   Literal() {
@@ -56,6 +80,7 @@ class Parser {
 
   _eat(tokenType) {
     const token = this._lookahead;
+
     if (token === null) {
       throw SyntaxError(`Unexpected end of input, expected: "${tokenType}"`);
     }

@@ -1,12 +1,13 @@
-const { constants } = require("./constants");
+const { constants, regularExpressions } = require("./constants");
 
 const Spec = [
-  [/^\d+/, constants.NUMBER],
-  [/"[^"]*"/, constants.STRING],
-  [/'[^']*'/, constants.STRING],
-  [/^\s+/, null], // White space
-  [/^\/\/.*/, null], // Single-line comment
-  [/^\/\*[\s\S]*?\*\//, null], // Multi-line comment
+  [regularExpressions.SEMICOLON, constants.SEMICOLON],
+  [regularExpressions.NUMBER, constants.NUMBER],
+  [regularExpressions.STRING_DOUBLE, constants.STRING],
+  [regularExpressions.STRING_SINGLE, constants.STRING],
+  [regularExpressions.WHITE_SPACE, null], // White space
+  [regularExpressions.SINGLE_COMMENT, null], // Single-line comment
+  [regularExpressions.MULTI_COMMENT, null], // Multi-line comment
 ];
 
 class Tokenizer {
@@ -32,6 +33,7 @@ class Tokenizer {
 
     for (const [regexp, tokenType] of Spec) {
       const tokenValue = this._match(regexp, string);
+
       if (tokenValue === null) {
         continue;
       }
@@ -47,6 +49,7 @@ class Tokenizer {
     }
     throw new SyntaxError(`Unexpected token: "${string[0]}"`);
   }
+
   _match(regexp, string) {
     const matched = regexp.exec(string);
     if (matched == null) {

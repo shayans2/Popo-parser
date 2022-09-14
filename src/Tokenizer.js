@@ -6,6 +6,10 @@ class Tokenizer {
     this._cursor = 0;
   }
 
+  isEOF() {
+    return this._cursor === this._string.length;
+  }
+
   hasMoreTokens() {
     return this._cursor < this._string.length;
   }
@@ -29,6 +33,21 @@ class Tokenizer {
       };
     }
     // END Numbers
+
+    // BEGIN Strings
+    if (string[0] === '"') {
+      let generatedString = "";
+      do {
+        generatedString += string[this._cursor++];
+      } while (string[this._cursor] !== '"' && !this.isEOF());
+      generatedString += this._cursor++;
+      return {
+        type: constants.STRING,
+        value: generatedString,
+      };
+    }
+
+    // END Strings
   }
 }
 

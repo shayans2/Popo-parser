@@ -14,7 +14,7 @@ class Parser {
     // this._string = string;
     this._tokenizer.init(string);
     this._lookahead = this._tokenizer.getNextToken();
-
+    // console.log(this._tokenizer.getNextToken());
     return this.Program();
   }
 
@@ -22,7 +22,35 @@ class Parser {
   Program() {
     return {
       type: constants.Program,
-      body: this.NumericLiteral(),
+      body: this.Literal(),
+    };
+  }
+
+  Literal() {
+    switch (this._lookahead.type) {
+      case constants.NUMBER:
+        return this.NumericLiteral();
+      case constants.STRING:
+        return this.StringLiteral();
+    }
+    throw new SyntaxError("Literal: unexpected literal production");
+  }
+
+  StringLiteral() {
+    const token = this._eat(constants.STRING);
+
+    return {
+      type: constants.StringLiteral,
+      value: token.value.slice(1, -1),
+    };
+  }
+
+  // NumericLiteral
+  NumericLiteral() {
+    const token = this._eat(constants.NUMBER);
+    return {
+      type: constants.NumericLiteral,
+      value: Number(token.value),
     };
   }
 
@@ -41,15 +69,6 @@ class Parser {
     this._lookahead = this._tokenizer.getNextToken();
 
     return token;
-  }
-
-  // NumericLiteral
-  NumericLiteral() {
-    const token = this._eat(constants.NUMBER);
-    return {
-      type: constants.NumericLiteral,
-      value: Number(token.value),
-    };
   }
 }
 

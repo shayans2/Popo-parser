@@ -1,6 +1,8 @@
 const { constants, regularExpressions } = require("./constants");
 
 const Spec = [
+  [regularExpressions.ADDITIVE_OPERATOR, constants.ADDITIVE_OPERATOR],
+
   [regularExpressions.SEMICOLON, constants.SEMICOLON],
 
   [regularExpressions.CURLY_BRACE_OPEN, constants.CURLY_BRACE_OPEN],

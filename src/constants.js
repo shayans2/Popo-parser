@@ -5,6 +5,7 @@ const constants = {
   SEMICOLON: ";",
   CURLY_BRACE_OPEN: "{",
   CURLY_BRACE_CLOSE: "}",
+  ADDITIVE_OPERATOR: "ADDITIVE_OPERATOR",
 
   // Parser
   Program: "Program",
@@ -13,9 +14,12 @@ const constants = {
   ExpressionStatement: "ExpressionStatement",
   BlockStatement: "BlockStatement",
   EmptyStatement: "EmptyStatement",
+  BinaryExpression: "BinaryExpression",
 };
 
 const regularExpressions = {
+  ADDITIVE_OPERATOR: /^[+\-]/,
+
   SEMICOLON: /^;/,
 
   CURLY_BRACE_OPEN: /^\{/,

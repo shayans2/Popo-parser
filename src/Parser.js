@@ -24,7 +24,11 @@ class Parser {
 
   // Main entry
   Program() {
-    return factory.Program(this.StatementList());
+    // return factory.Program(this.StatementList());
+    return {
+      type: constants.Program,
+      body: this.StatementList(),
+    };
   }
 
   StatementList(stopLookahead = null) {
@@ -49,7 +53,11 @@ class Parser {
 
   EmptyStatement() {
     this._eat(constants.SEMICOLON);
-    return factory.EmptyStatement();
+
+    // return factory.EmptyStatement();
+    return {
+      type: constants.EmptyStatement,
+    };
   }
 
   BlockStatement() {
@@ -60,17 +68,42 @@ class Parser {
         : [];
     this._eat(constants.CURLY_BRACE_CLOSE);
 
-    return factory.BlockStatement(body);
+    // return factory.BlockStatement(body);
+    return {
+      type: constants.BlockStatement,
+      body,
+    };
   }
 
   ExpressionStatement() {
     const expression = this.Expression();
     this._eat(constants.SEMICOLON);
-    return factory.ExpressionStatement(expression);
+    // return factory.ExpressionStatement(expression);
+    return {
+      type: constants.ExpressionStatement,
+      expression,
+    };
   }
 
   Expression() {
-    return this.Literal();
+    return this.AdditiveExpression();
+  }
+
+  AdditiveExpression() {
+    let left = this.Literal();
+    while (this._lookahead.type === constants.ADDITIVE_OPERATOR) {
+      const operator = this._eat(constants.ADDITIVE_OPERATOR).value;
+      const right = this.Literal();
+
+      left = {
+        type: constants.BinaryExpression,
+        operator,
+        left,
+        right,
+      };
+    }
+
+    return left;
   }
 
   Literal() {
@@ -89,7 +122,6 @@ class Parser {
     return factory.StringLiteral(value);
   }
 
-  // NumericLiteral
   NumericLiteral() {
     const token = this._eat(constants.NUMBER);
     const value = Number(token.value);

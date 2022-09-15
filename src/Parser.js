@@ -1,5 +1,11 @@
-const { constants } = require("./constants");
 const { Tokenizer } = require("./Tokenizer");
+const { DefaultFactory } = require("./Factories");
+
+const { config } = require("./config");
+const { constants } = require("./constants");
+
+// TODO: Add other factory methods
+const factory = config.AST_MODE === "default" ? DefaultFactory : null;
 
 // Recursive descent parser
 class Parser {
@@ -18,10 +24,7 @@ class Parser {
 
   // Main entry
   Program() {
-    return {
-      type: constants.Program,
-      body: this.StatementList(),
-    };
+    return factory.Program(this.StatementList());
   }
 
   StatementList(stopLookahead = null) {
@@ -46,9 +49,7 @@ class Parser {
 
   EmptyStatement() {
     this._eat(constants.SEMICOLON);
-    return {
-      type: constants.EmptyStatement,
-    };
+    return factory.EmptyStatement();
   }
 
   BlockStatement() {
@@ -59,19 +60,13 @@ class Parser {
         : [];
     this._eat(constants.CURLY_BRACE_CLOSE);
 
-    return {
-      type: constants.BlockStatement,
-      body,
-    };
+    return factory.BlockStatement(body);
   }
 
   ExpressionStatement() {
     const expression = this.Expression();
     this._eat(constants.SEMICOLON);
-    return {
-      type: constants.ExpressionStatement,
-      expression,
-    };
+    return factory.ExpressionStatement(expression);
   }
 
   Expression() {
@@ -90,20 +85,15 @@ class Parser {
 
   StringLiteral() {
     const token = this._eat(constants.STRING);
-
-    return {
-      type: constants.StringLiteral,
-      value: token.value.slice(1, -1),
-    };
+    const value = token.value.slice(1, -1);
+    return factory.StringLiteral(value);
   }
 
   // NumericLiteral
   NumericLiteral() {
     const token = this._eat(constants.NUMBER);
-    return {
-      type: constants.NumericLiteral,
-      value: Number(token.value),
-    };
+    const value = Number(token.value);
+    return factory.NumericLiteral(value);
   }
 
   _eat(tokenType) {

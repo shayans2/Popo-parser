@@ -1,28 +1,28 @@
 const { Parser } = require("../src/Parser");
 const assert = require("assert");
 
-const tests = [require("./literals-test")];
+const tests = [require("./literals-test"), require("./statement-list-test")];
 
 const parser = new Parser();
 
+// Manual test
 const exec = () => {
   const program = ` 
-  'test';
-  43;
+  'hello';
+   43;
   `;
 
   const ast = parser.parse(program);
 
   console.log(JSON.stringify(ast, null, 2));
 };
-
-exec();
+// exec();
 
 const test = (program, expected) => {
   const ast = parser.parse(program);
   assert.deepEqual(ast, expected);
 };
 
-// tests.forEach((testRun) => testRun(test));
+tests.forEach((testRun) => testRun(test));
 
 console.log("✅ All assertions passed");

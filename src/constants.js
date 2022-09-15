@@ -12,6 +12,7 @@ const constants = {
   StringLiteral: "StringLiteral",
   ExpressionStatement: "ExpressionStatement",
   BlockStatement: "BlockStatement",
+  EmptyStatement: "EmptyStatement",
 };
 
 const regularExpressions = {

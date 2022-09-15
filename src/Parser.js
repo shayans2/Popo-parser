@@ -35,11 +35,20 @@ class Parser {
   // Expression Statement
   Statement() {
     switch (this._lookahead.type) {
+      case constants.SEMICOLON:
+        return this.EmptyStatement();
       case constants.CURLY_BRACE_OPEN:
         return this.BlockStatement();
       default:
         return this.ExpressionStatement();
     }
+  }
+
+  EmptyStatement() {
+    this._eat(constants.SEMICOLON);
+    return {
+      type: constants.EmptyStatement,
+    };
   }
 
   BlockStatement() {

@@ -5,6 +5,7 @@ const tests = [
   require("./literals-test"),
   require("./statement-list-test"),
   require("./block-test"),
+  require("./empty-statement-test"),
 ];
 
 const parser = new Parser();
@@ -29,4 +30,4 @@ const test = (program, expected) => {
 
 tests.forEach((testRun) => testRun(test));
 
-console.log("✅ All assertions passed");
+console.log("✅ All assertions passed!");

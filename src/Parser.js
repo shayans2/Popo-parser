@@ -24,9 +24,9 @@ class Parser {
     };
   }
 
-  StatementList() {
+  StatementList(stopLookahead = null) {
     const list = [this.Statement()];
-    while (this._lookahead != null) {
+    while (this._lookahead != null && this._lookahead.type !== stopLookahead) {
       list.push(this.Statement());
     }
     return list;
@@ -34,7 +34,26 @@ class Parser {
 
   // Expression Statement
   Statement() {
-    return this.ExpressionStatement();
+    switch (this._lookahead.type) {
+      case constants.CURLY_BRACE_OPEN:
+        return this.BlockStatement();
+      default:
+        return this.ExpressionStatement();
+    }
+  }
+
+  BlockStatement() {
+    this._eat(constants.CURLY_BRACE_OPEN);
+    const body =
+      this._lookahead.type !== constants.CURLY_BRACE_CLOSE
+        ? this.StatementList(constants.CURLY_BRACE_CLOSE)
+        : [];
+    this._eat(constants.CURLY_BRACE_CLOSE);
+
+    return {
+      type: constants.BlockStatement,
+      body,
+    };
   }
 
   ExpressionStatement() {

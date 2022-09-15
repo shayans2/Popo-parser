@@ -1,7 +1,11 @@
 const { Parser } = require("../src/Parser");
 const assert = require("assert");
 
-const tests = [require("./literals-test"), require("./statement-list-test")];
+const tests = [
+  require("./literals-test"),
+  require("./statement-list-test"),
+  require("./block-test"),
+];
 
 const parser = new Parser();
 

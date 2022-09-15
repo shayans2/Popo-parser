@@ -2,12 +2,18 @@ const { constants, regularExpressions } = require("./constants");
 
 const Spec = [
   [regularExpressions.SEMICOLON, constants.SEMICOLON],
+
+  [regularExpressions.CURLY_BRACE_OPEN, constants.CURLY_BRACE_OPEN],
+  [regularExpressions.CURLY_BRACE_CLOSE, constants.CURLY_BRACE_CLOSE],
+
   [regularExpressions.NUMBER, constants.NUMBER],
   [regularExpressions.STRING_DOUBLE, constants.STRING],
   [regularExpressions.STRING_SINGLE, constants.STRING],
-  [regularExpressions.WHITE_SPACE, null], // White space
-  [regularExpressions.SINGLE_COMMENT, null], // Single-line comment
-  [regularExpressions.MULTI_COMMENT, null], // Multi-line comment
+
+  [regularExpressions.WHITE_SPACE, null],
+
+  [regularExpressions.SINGLE_COMMENT, null],
+  [regularExpressions.MULTI_COMMENT, null],
 ];
 
 class Tokenizer {

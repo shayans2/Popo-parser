@@ -90,28 +90,24 @@ class Parser {
   }
 
   AdditiveExpression() {
-    let left = this.MultiplicativeExpression();
-    while (this._lookahead.type === constants.ADDITIVE_OPERATOR) {
-      const operator = this._eat(constants.ADDITIVE_OPERATOR).value;
-      const right = this.MultiplicativeExpression();
-
-      left = {
-        type: constants.BinaryExpression,
-        operator,
-        left,
-        right,
-      };
-    }
-
-    return left;
+    return this._BinaryExpression(
+      constants.MultiplicativeExpression,
+      constants.ADDITIVE_OPERATOR
+    );
   }
 
   MultiplicativeExpression() {
-    let left = this.PrimaryExpression();
-    while (this._lookahead.type === constants.MULTIPLICATIVE_OPERATOR) {
-      const operator = this._eat(constants.MULTIPLICATIVE_OPERATOR).value;
-      const right = this.PrimaryExpression();
+    return this._BinaryExpression(
+      constants.PrimaryExpression,
+      constants.MULTIPLICATIVE_OPERATOR
+    );
+  }
 
+  _BinaryExpression(builderName, operatorToken) {
+    let left = this[builderName]();
+    while (this._lookahead.type === operatorToken) {
+      const operator = this._eat(operatorToken).value;
+      const right = this[builderName]();
       left = {
         type: constants.BinaryExpression,
         operator,
@@ -119,7 +115,6 @@ class Parser {
         right,
       };
     }
-
     return left;
   }
 

@@ -18,6 +18,8 @@ const constants = {
   BlockStatement: "BlockStatement",
   EmptyStatement: "EmptyStatement",
   BinaryExpression: "BinaryExpression",
+  PrimaryExpression: "PrimaryExpression",
+  MultiplicativeExpression: "MultiplicativeExpression",
 };
 
 const regularExpressions = {

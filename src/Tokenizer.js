@@ -2,11 +2,18 @@ const { constants, regularExpressions } = require("./constants");
 
 const Spec = [
   [regularExpressions.ADDITIVE_OPERATOR, constants.ADDITIVE_OPERATOR],
+  [
+    regularExpressions.MULTIPLICATIVE_OPERATOR,
+    constants.MULTIPLICATIVE_OPERATOR,
+  ],
 
   [regularExpressions.SEMICOLON, constants.SEMICOLON],
 
   [regularExpressions.CURLY_BRACE_OPEN, constants.CURLY_BRACE_OPEN],
   [regularExpressions.CURLY_BRACE_CLOSE, constants.CURLY_BRACE_CLOSE],
+
+  [regularExpressions.PARENTHESIZE_OPEN, constants.PARENTHESIZE_OPEN],
+  [regularExpressions.PARENTHESIZE_CLOSE, constants.PARENTHESIZE_CLOSE],
 
   [regularExpressions.NUMBER, constants.NUMBER],
   [regularExpressions.STRING_DOUBLE, constants.STRING],

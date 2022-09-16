@@ -6,6 +6,9 @@ const constants = {
   CURLY_BRACE_OPEN: "{",
   CURLY_BRACE_CLOSE: "}",
   ADDITIVE_OPERATOR: "ADDITIVE_OPERATOR",
+  MULTIPLICATIVE_OPERATOR: "MULTIPLICATIVE_OPERATOR",
+  PARENTHESIZE_OPEN: "(",
+  PARENTHESIZE_CLOSE: ")",
 
   // Parser
   Program: "Program",
@@ -19,11 +22,15 @@ const constants = {
 
 const regularExpressions = {
   ADDITIVE_OPERATOR: /^[+\-]/,
+  MULTIPLICATIVE_OPERATOR: /^[*\/]/,
 
   SEMICOLON: /^;/,
 
   CURLY_BRACE_OPEN: /^\{/,
   CURLY_BRACE_CLOSE: /^\}/,
+
+  PARENTHESIZE_OPEN: /^\(/,
+  PARENTHESIZE_CLOSE: /^\)/,
 
   NUMBER: /^\d+/,
   STRING_DOUBLE: /^"[^"]*"/,

@@ -90,10 +90,10 @@ class Parser {
   }
 
   AdditiveExpression() {
-    let left = this.Literal();
+    let left = this.MultiplicativeExpression();
     while (this._lookahead.type === constants.ADDITIVE_OPERATOR) {
       const operator = this._eat(constants.ADDITIVE_OPERATOR).value;
-      const right = this.Literal();
+      const right = this.MultiplicativeExpression();
 
       left = {
         type: constants.BinaryExpression,
@@ -104,6 +104,41 @@ class Parser {
     }
 
     return left;
+  }
+
+  MultiplicativeExpression() {
+    let left = this.PrimaryExpression();
+    while (this._lookahead.type === constants.MULTIPLICATIVE_OPERATOR) {
+      const operator = this._eat(constants.MULTIPLICATIVE_OPERATOR).value;
+      const right = this.PrimaryExpression();
+
+      left = {
+        type: constants.BinaryExpression,
+        operator,
+        left,
+        right,
+      };
+    }
+
+    return left;
+  }
+
+  PrimaryExpression() {
+    switch (this._lookahead.type) {
+      case constants.PARENTHESIZE_OPEN:
+        return this.ParenthesizedExpression();
+      default:
+        return this.Literal();
+    }
+  }
+
+  // '(' Expression ')'
+  ParenthesizedExpression() {
+    this._eat(constants.PARENTHESIZE_OPEN);
+    const expression = this.Expression();
+    this._eat(constants.PARENTHESIZE_CLOSE);
+
+    return expression;
   }
 
   Literal() {
